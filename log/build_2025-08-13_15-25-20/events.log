@@ -1,0 +1,164 @@
+[0.000000] (-) TimerEvent: {}
+[0.000241] (bms_can_bridge_cpp) JobQueued: {'identifier': 'bms_can_bridge_cpp', 'dependencies': OrderedDict()}
+[0.000875] (bms_can_bridge_cpp) JobStarted: {'identifier': 'bms_can_bridge_cpp'}
+[0.012217] (bms_can_bridge_cpp) JobProgress: {'identifier': 'bms_can_bridge_cpp', 'progress': 'cmake'}
+[0.013519] (bms_can_bridge_cpp) Command: {'cmd': ['/usr/bin/cmake', '/home/ray/ros2_ws/src/bms_can_bridge_cpp', '-DCMAKE_INSTALL_PREFIX=/home/ray/ros2_ws/src/bms_can_bridge_cpp/install/bms_can_bridge_cpp'], 'cwd': '/home/ray/ros2_ws/src/bms_can_bridge_cpp/build/bms_can_bridge_cpp', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'ray'), ('GIT_ASKPASS', '/home/ray/.cursor-server/bin/e50823e9ded15fddfd743c7122b4724130c25df0/extensions/git/dist/askpass.sh'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('MOTD_SHOWN', 'update-motd'), ('HOME', '/home/ray'), ('OLDPWD', '/home/ray/ros2_ws/src'), ('DISABLE_AUTO_UPDATE', 'true'), ('TERM_PROGRAM_VERSION', '1.4.3'), ('VSCODE_IPC_HOOK_CLI', '/run/user/1000/vscode-ipc-3aa2706c-366c-4a85-94d4-b44faaeac3cd.sock'), ('ROS_PYTHON_VERSION', '3'), ('VSCODE_GIT_ASKPASS_MAIN', '/home/ray/.cursor-server/bin/e50823e9ded15fddfd743c7122b4724130c25df0/extensions/git/dist/askpass-main.js'), ('VSCODE_GIT_ASKPASS_NODE', '/home/ray/.cursor-server/bin/e50823e9ded15fddfd743c7122b4724130c25df0/node'), ('npm_config_yes', 'true'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('WSL_DISTRO_NAME', 'Ubuntu-22.04'), ('WAYLAND_DISPLAY', 'wayland-0'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'ray'), ('NAME', 'LAPTOP-FNOFGVC2'), ('WSL_INTEROP', '/run/WSL/325_interop'), ('PULSE_SERVER', 'unix:/mnt/wslg/PulseServer'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm-256color'), ('ROS_LOCALHOST_ONLY', '0'), ('COMPOSER_NO_INTERACTION', '1'), ('PATH', '/home/ray/.cursor-server/bin/e50823e9ded15fddfd743c7122b4724130c25df0/bin/remote-cli:/opt/ros/humble/bin:/home/ray/.cursor-server/bin/e50823e9ded15fddfd743c7122b4724130c25df0/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/Google/Chrome/Application:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/CMake/bin:/mnt/c/Users/TeleAI/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/TeleAI/AppData/Local/Programs/Microsoft VS Code/bin:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000/'), ('CURSOR_AGENT', '1'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/1000/vscode-git-51907796ec.sock'), ('TERM_PROGRAM', 'vscode'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('PWD', '/home/ray/ros2_ws/src/bms_can_bridge_cpp/build/bms_can_bridge_cpp'), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('PIP_NO_INPUT', 'true'), ('WSL2_GUI_APPS_ENABLED', '1'), ('HOSTTYPE', 'x86_64'), ('WSLENV', ''), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[0.100051] (-) TimerEvent: {}
+[0.200641] (-) TimerEvent: {}
+[0.266687] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[0.301105] (-) TimerEvent: {}
+[0.401969] (-) TimerEvent: {}
+[0.502400] (-) TimerEvent: {}
+[0.602936] (-) TimerEvent: {}
+[0.703581] (-) TimerEvent: {}
+[0.804446] (-) TimerEvent: {}
+[0.830164] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[0.904752] (-) TimerEvent: {}
+[1.005866] (-) TimerEvent: {}
+[1.106321] (-) TimerEvent: {}
+[1.206752] (-) TimerEvent: {}
+[1.215133] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[1.307093] (-) TimerEvent: {}
+[1.383061] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[1.387953] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[1.388447] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[1.389093] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[1.392268] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[1.407302] (-) TimerEvent: {}
+[1.507920] (-) TimerEvent: {}
+[1.540082] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[1.545149] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[1.545432] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[1.545643] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[1.552803] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)\n'}
+[1.611042] (-) TimerEvent: {}
+[1.682604] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter \n'}
+[1.711344] (-) TimerEvent: {}
+[1.772353] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Found rclcpp: 16.0.14 (/opt/ros/humble/share/rclcpp/cmake)\n'}
+[1.811579] (-) TimerEvent: {}
+[1.912513] (-) TimerEvent: {}
+[1.941423] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Found rosidl_generator_c: 3.1.7 (/opt/ros/humble/share/rosidl_generator_c/cmake)\n'}
+[1.947744] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Found rosidl_adapter: 3.1.7 (/opt/ros/humble/share/rosidl_adapter/cmake)\n'}
+[1.959784] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 3.1.7 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)\n'}
+[1.975283] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[1.994233] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[2.012875] (-) TimerEvent: {}
+[2.047737] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)\n'}
+[2.051083] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Found rmw_fastrtps_cpp: 6.2.8 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)\n'}
+[2.113435] (-) TimerEvent: {}
+[2.214647] (-) TimerEvent: {}
+[2.315378] (-) TimerEvent: {}
+[2.416245] (-) TimerEvent: {}
+[2.516939] (-) TimerEvent: {}
+[2.618117] (-) TimerEvent: {}
+[2.728795] (-) TimerEvent: {}
+[2.839518] (-) TimerEvent: {}
+[2.950075] (-) TimerEvent: {}
+[3.057618] (-) TimerEvent: {}
+[3.158285] (-) TimerEvent: {}
+[3.259128] (-) TimerEvent: {}
+[3.360393] (-) TimerEvent: {}
+[3.470148] (-) TimerEvent: {}
+[3.580508] (-) TimerEvent: {}
+[3.594089] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  \n'}
+[3.686253] (-) TimerEvent: {}
+[3.796843] (-) TimerEvent: {}
+[3.897954] (-) TimerEvent: {}
+[4.001691] (-) TimerEvent: {}
+[4.112229] (-) TimerEvent: {}
+[4.222237] (-) TimerEvent: {}
+[4.332669] (-) TimerEvent: {}
+[4.443170] (-) TimerEvent: {}
+[4.548394] (-) TimerEvent: {}
+[4.648943] (-) TimerEvent: {}
+[4.750046] (-) TimerEvent: {}
+[4.860590] (-) TimerEvent: {}
+[4.967714] (-) TimerEvent: {}
+[5.071495] (-) TimerEvent: {}
+[5.177800] (-) TimerEvent: {}
+[5.283849] (-) TimerEvent: {}
+[5.387858] (-) TimerEvent: {}
+[5.454539] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Found FastRTPS: /opt/ros/humble/include  \n'}
+[5.491252] (-) TimerEvent: {}
+[5.591714] (-) TimerEvent: {}
+[5.692612] (-) TimerEvent: {}
+[5.793574] (-) TimerEvent: {}
+[5.894747] (-) TimerEvent: {}
+[6.005152] (-) TimerEvent: {}
+[6.110285] (-) TimerEvent: {}
+[6.210641] (-) TimerEvent: {}
+[6.314733] (-) TimerEvent: {}
+[6.422404] (-) TimerEvent: {}
+[6.532846] (-) TimerEvent: {}
+[6.634099] (-) TimerEvent: {}
+[6.744753] (-) TimerEvent: {}
+[6.847020] (-) TimerEvent: {}
+[6.948318] (-) TimerEvent: {}
+[7.053210] (-) TimerEvent: {}
+[7.154038] (-) TimerEvent: {}
+[7.254489] (-) TimerEvent: {}
+[7.355261] (-) TimerEvent: {}
+[7.456258] (-) TimerEvent: {}
+[7.557666] (-) TimerEvent: {}
+[7.660753] (-) TimerEvent: {}
+[7.763263] (-) TimerEvent: {}
+[7.865965] (-) TimerEvent: {}
+[7.968986] (-) TimerEvent: {}
+[8.071597] (-) TimerEvent: {}
+[8.176357] (-) TimerEvent: {}
+[8.277308] (-) TimerEvent: {}
+[8.378588] (-) TimerEvent: {}
+[8.480965] (-) TimerEvent: {}
+[8.583519] (-) TimerEvent: {}
+[8.684873] (-) TimerEvent: {}
+[8.785920] (-) TimerEvent: {}
+[8.886756] (-) TimerEvent: {}
+[8.900418] (bms_can_bridge_cpp) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[8.916034] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Looking for pthread.h\n'}
+[8.987118] (-) TimerEvent: {}
+[9.081027] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Looking for pthread.h - found\n'}
+[9.081303] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n'}
+[9.087358] (-) TimerEvent: {}
+[9.188985] (-) TimerEvent: {}
+[9.248274] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success\n'}
+[9.249550] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Found Threads: TRUE  \n'}
+[9.289433] (-) TimerEvent: {}
+[9.315119] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Found can_msgs: 2.0.0 (/opt/ros/humble/share/can_msgs/cmake)\n'}
+[9.331787] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Found sensor_msgs: 4.9.0 (/opt/ros/humble/share/sensor_msgs/cmake)\n'}
+[9.395469] (-) TimerEvent: {}
+[9.496511] (-) TimerEvent: {}
+[9.606847] (-) TimerEvent: {}
+[9.717328] (-) TimerEvent: {}
+[9.827673] (-) TimerEvent: {}
+[9.938158] (-) TimerEvent: {}
+[10.048521] (-) TimerEvent: {}
+[10.158930] (-) TimerEvent: {}
+[10.261804] (-) TimerEvent: {}
+[10.362863] (-) TimerEvent: {}
+[10.473696] (-) TimerEvent: {}
+[10.584144] (-) TimerEvent: {}
+[10.691158] (-) TimerEvent: {}
+[10.801529] (-) TimerEvent: {}
+[10.912190] (-) TimerEvent: {}
+[11.008367] (bms_can_bridge_cpp) StderrLine: {'line': b'\x1b[31mCMake Error at CMakeLists.txt:17 (find_package):\n'}
+[11.008913] (bms_can_bridge_cpp) StderrLine: {'line': b'  By not providing "FindQt6.cmake" in CMAKE_MODULE_PATH this project has\n'}
+[11.009058] (bms_can_bridge_cpp) StderrLine: {'line': b'  asked CMake to find a package configuration file provided by "Qt6", but\n'}
+[11.009104] (bms_can_bridge_cpp) StderrLine: {'line': b'  CMake did not find one.\n'}
+[11.009135] (bms_can_bridge_cpp) StderrLine: {'line': b'\n'}
+[11.009165] (bms_can_bridge_cpp) StderrLine: {'line': b'  Could not find a package configuration file provided by "Qt6" with any of\n'}
+[11.009195] (bms_can_bridge_cpp) StderrLine: {'line': b'  the following names:\n'}
+[11.009223] (bms_can_bridge_cpp) StderrLine: {'line': b'\n'}
+[11.009250] (bms_can_bridge_cpp) StderrLine: {'line': b'    Qt6Config.cmake\n'}
+[11.009277] (bms_can_bridge_cpp) StderrLine: {'line': b'    qt6-config.cmake\n'}
+[11.009305] (bms_can_bridge_cpp) StderrLine: {'line': b'\n'}
+[11.009333] (bms_can_bridge_cpp) StderrLine: {'line': b'  Add the installation prefix of "Qt6" to CMAKE_PREFIX_PATH or set "Qt6_DIR"\n'}
+[11.009361] (bms_can_bridge_cpp) StderrLine: {'line': b'  to a directory containing one of the above files.  If "Qt6" provides a\n'}
+[11.009387] (bms_can_bridge_cpp) StderrLine: {'line': b'  separate development package or SDK, be sure it has been installed.\n'}
+[11.009414] (bms_can_bridge_cpp) StderrLine: {'line': b'\n'}
+[11.009440] (bms_can_bridge_cpp) StderrLine: {'line': b'\x1b[0m\n'}
+[11.009466] (bms_can_bridge_cpp) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[11.009502] (bms_can_bridge_cpp) StdoutLine: {'line': b'See also "/home/ray/ros2_ws/src/bms_can_bridge_cpp/build/bms_can_bridge_cpp/CMakeFiles/CMakeOutput.log".\n'}
+[11.012653] (-) TimerEvent: {}
+[11.019181] (bms_can_bridge_cpp) CommandEnded: {'returncode': 1}
+[11.042067] (bms_can_bridge_cpp) JobEnded: {'identifier': 'bms_can_bridge_cpp', 'rc': 1}
+[11.053235] (-) EventReactorShutdown: {}

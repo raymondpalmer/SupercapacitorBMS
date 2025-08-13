@@ -1,0 +1,2 @@
+Invoking command in '/home/ray/ros2_ws/src/bms_can_bridge_cpp/build/bms_can_bridge_cpp': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ray/ros2_ws/src/bms_can_bridge_cpp -DCMAKE_INSTALL_PREFIX=/home/ray/ros2_ws/src/bms_can_bridge_cpp/install/bms_can_bridge_cpp
+Invoked command in '/home/ray/ros2_ws/src/bms_can_bridge_cpp/build/bms_can_bridge_cpp' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ray/ros2_ws/src/bms_can_bridge_cpp -DCMAKE_INSTALL_PREFIX=/home/ray/ros2_ws/src/bms_can_bridge_cpp/install/bms_can_bridge_cpp

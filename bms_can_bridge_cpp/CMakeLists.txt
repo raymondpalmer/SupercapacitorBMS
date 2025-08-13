@@ -7,7 +7,6 @@ if(NOT CMAKE_CXX_STANDARD)
 endif()
 
 # 查找必要的包
-set(CMAKE_PREFIX_PATH "/opt/ros/humble;${CMAKE_PREFIX_PATH}")
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(can_msgs REQUIRED)
@@ -15,7 +14,6 @@ find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 
 # 查找Qt包 - 优先使用Qt5
-set(CMAKE_PREFIX_PATH "/usr/lib/x86_64-linux-gnu/cmake/Qt5;${CMAKE_PREFIX_PATH}")
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 if(NOT Qt5_FOUND)
   find_package(Qt6 COMPONENTS Core Widgets REQUIRED)
@@ -26,12 +24,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-# 设置Qt包含路径
-include_directories(/usr/include/x86_64-linux-gnu/qt5)
-include_directories(/usr/include/x86_64-linux-gnu/qt5/QtCore)
-include_directories(/usr/include/x86_64-linux-gnu/qt5/QtWidgets)
-include_directories(/usr/include/x86_64-linux-gnu/qt5/QtGui)
-
 # 包含目录
 include_directories(include)
 
@@ -41,27 +33,19 @@ add_executable(bms_display_system
   src/bms_display_ui.cpp
 )
 
-# 创建简化版本的BMS显示系统（不依赖ROS2）
-add_executable(bms_display_simple
-  src/bms_display_simple.cpp
-)
-
-# 创建简单测试程序
-add_executable(simple_test
-  src/simple_test.cpp
-)
-
 # 链接Qt库
-if(Qt6_FOUND)
-  target_link_libraries(bms_display_system
-    Qt6::Core
-    Qt6::Widgets
-  )
-else()
+if(Qt5_FOUND)
   target_link_libraries(bms_display_system
     Qt5::Core
     Qt5::Widgets
   )
+  message(STATUS "Using Qt5")
+else()
+  target_link_libraries(bms_display_system
+    Qt6::Core
+    Qt6::Widgets
+  )
+  message(STATUS "Using Qt6")
 endif()
 
 # 链接ROS2库
@@ -115,14 +99,14 @@ ament_export_dependencies(
 )
 
 # 导出目标
-# ament_export_targets(export_${PROJECT_NAME} HAS_LIBRARY_TARGETS)  # 这个命令不正确
-# ament_export_libraries(${PROJECT_NAME})  # 这个命令不正确
+ament_export_targets(export_${PROJECT_NAME} HAS_LIBRARY_TARGETS)
+ament_export_libraries(${PROJECT_NAME})
 
 # 导出包含目录
 ament_export_include_directories(include)
 
 # 导出库目录
-# ament_export_library_directories(lib)  # 这个命令不存在，注释掉
+ament_export_library_directories(lib)
 
 # 导出依赖
 ament_package()

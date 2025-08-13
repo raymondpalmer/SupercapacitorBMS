@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20250813-0630-Experimental"
+	Name="LAPTOP-FNOFGVC2"
+	Generator="ctest-3.22.1"
+	CompilerName="/usr/bin/c++"
+	CompilerVersion="11.4.0"
+	OSName="Linux"
+	Hostname="LAPTOP-FNOFGVC2"
+	OSRelease="6.6.87.2-microsoft-standard-WSL2"
+	OSVersion="#1 SMP PREEMPT_DYNAMIC Thu Jun  5 18:30:46 UTC 2025"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="186"
+	ProcessorCacheSize="18432"
+	NumberOfLogicalCPU="16"
+	NumberOfPhysicalCPU="8"
+	TotalVirtualMemory="2048"
+	TotalPhysicalMemory="7700"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="3187.21"
+	>
+	<Testing>
+		<StartDateTime>Aug 13 14:30 CST</StartDateTime>
+		<StartTestTime>1755066627</StartTestTime>
+		<TestList/>
+		<EndDateTime>Aug 13 14:30 CST</EndDateTime>
+		<EndTestTime>1755066627</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

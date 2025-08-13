@@ -1,1 +1,1 @@
-rclcpp;can_msgs;sensor_msgs;std_msgs
+rclcpp;can_msgs;sensor_msgs;std_msgs;qt_gui_cpp;rqt_gui_cpp
