@@ -1,0 +1,87 @@
+{
+  "version": 2,
+  "layout": {
+    "direction": "horizontal",
+    "splitPercentage": 55,
+    "first": {
+      "direction": "vertical",
+      "splitPercentage": 60,
+      "first": {
+        "id": "timeseries"
+      },
+      "second": {
+        "id": "diagnostics"
+      }
+    },
+    "second": {
+      "id": "raw"
+    }
+  },
+  "panels": [
+    {
+      "id": "timeseries",
+      "type": "TimeSeries",
+      "title": "BMS Metrics",
+      "config": {
+        "topics": [
+          {
+            "topic": "/bms/batt_st1",
+            "value": "voltage"
+          },
+          {
+            "topic": "/bms/batt_st1",
+            "value": "current"
+          },
+          {
+            "topic": "/bms/batt_st1",
+            "value": "percentage"
+          },
+          {
+            "topic": "/bms/cell/volt_summary",
+            "value": "data[0]"
+          },
+          {
+            "topic": "/bms/cell/volt_summary",
+            "value": "data[1]"
+          },
+          {
+            "topic": "/bms/cell/volt_summary",
+            "value": "data[2]"
+          },
+          {
+            "topic": "/bms/cell/temp_summary",
+            "value": "data[0]"
+          },
+          {
+            "topic": "/bms/cell/temp_summary",
+            "value": "data[1]"
+          },
+          {
+            "topic": "/bms/cell/temp_summary",
+            "value": "data[2]"
+          }
+        ]
+      }
+    },
+    {
+      "id": "diagnostics",
+      "type": "DiagnosticSummary",
+      "title": "BMS Diagnostics",
+      "config": {
+        "topic": "/bms/alarms"
+      }
+    },
+    {
+      "id": "raw",
+      "type": "RawMessages",
+      "title": "Raw",
+      "config": {
+        "topics": [
+          "/bms/info",
+          "/bms/limits",
+          "/bms/faults"
+        ]
+      }
+    }
+  ]
+}

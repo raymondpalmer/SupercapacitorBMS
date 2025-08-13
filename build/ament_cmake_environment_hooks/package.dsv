@@ -1,0 +1,4 @@
+source;share/bms_can_bridge_cpp/local_setup.bash
+source;share/bms_can_bridge_cpp/local_setup.dsv
+source;share/bms_can_bridge_cpp/local_setup.sh
+source;share/bms_can_bridge_cpp/local_setup.zsh

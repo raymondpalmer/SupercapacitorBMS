@@ -1,0 +1,14 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+  - Class: rviz_common/Views
+    Name: Views
+Visualization Manager:
+  Displays:
+    - Class: rviz_default_plugins/Diagnostics
+      Enabled: true
+      Name: Diagnostics
+      Topics:
+        - /bms/alarms
+        - /bms/faults
+        - /bms/limits

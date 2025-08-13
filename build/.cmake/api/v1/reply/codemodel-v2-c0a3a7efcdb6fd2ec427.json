@@ -1,0 +1,88 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-8f3268a24e19111de212.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "bms_can_bridge_cpp",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "bms_can_bridge_cpp_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-bms_can_bridge_cpp_uninstall-Debug-c1cbd36464319c7a0c48.json",
+					"name" : "bms_can_bridge_cpp_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "bms_state_node::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-bms_state_node-Debug-17cf1f614341e7447643.json",
+					"name" : "bms_state_node",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fake_can_pub::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fake_can_pub-Debug-1801c5041df8a0e0b402.json",
+					"name" : "fake_can_pub",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-Debug-52e3aa041ead548ac0a8.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/ray/ros2_ws/src/bms_can_bridge_cpp/build",
+		"source" : "/home/ray/ros2_ws/src/bms_can_bridge_cpp"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}
