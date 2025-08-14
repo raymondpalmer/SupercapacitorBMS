@@ -16,11 +16,21 @@ from PyQt5.QtGui import (
     QFontMetrics,
 )
 from PyQt5.QtWidgets import QApplication, QWidget
+import threading
+import json
+try:
+    import yaml  # optional for CAN mapping
+except Exception:
+    yaml = None
+try:
+    import can  # optional for socketcan backend
+except Exception:
+    can = None
 from collections import deque
 
 
 class BMSPreviewUI(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, backend: str = "sim", can_if: str = "can0", can_map_path: str = "", ros2_batt_topic: str = "/battery_state"):
         super().__init__(parent)
         # Battery/state
         self.battery_level = 72.0            # %
@@ -73,6 +83,13 @@ class BMSPreviewUI(QWidget):
         self.mode_hmi = False
         self.mode_ios18 = False
 
+        # Data backends
+        self.backend = backend
+        self.can_if = can_if
+        self.can_map_path = can_map_path
+        self.ros2_batt_topic = ros2_batt_topic
+        self._backend_threads = []
+
         # Timers
         self.update_timer = QTimer(self)
         self.update_timer.timeout.connect(self.on_update)
@@ -92,6 +109,158 @@ class BMSPreviewUI(QWidget):
             'pwr': deque(maxlen=18),
             'time': deque(maxlen=18),
         }
+        # Initialize data backend after UI basics
+        self.init_backend()
+
+    # ---------------- Data backend setup ----------------
+    def init_backend(self):
+        if self.backend == "ros2":
+            self._start_ros2_subscriber()
+        elif self.backend == "can":
+            self._start_can_reader()
+        else:
+            # sim: no-op
+            pass
+
+    def _start_ros2_subscriber(self):
+        try:
+            import rclpy
+            from rclpy.node import Node
+            from sensor_msgs.msg import BatteryState
+        except Exception as e:
+            print("[BMSPreviewUI] ROS2 backend requested but rclpy/sensor_msgs not available:", e)
+            return
+
+        class _BMSNode(Node):
+            def __init__(self, ui_ref: 'BMSPreviewUI'):
+                super().__init__('bms_preview_ui_node')
+                self.ui_ref = ui_ref
+                self.sub_batt = self.create_subscription(BatteryState, ui_ref.ros2_batt_topic, self._on_batt, 10)
+
+            def _on_batt(self, msg: 'BatteryState'):
+                # Update UI fields (thread-safe enough for Python)
+                # Prefer msg.percentage [0..1], else derive from voltage if needed
+                if msg.percentage is not None and not math.isnan(msg.percentage):
+                    self.ui_ref.battery_level = max(0.0, min(100.0, msg.percentage * 100.0))
+                # Voltage/current/temperature
+                if not math.isnan(msg.voltage):
+                    self.ui_ref.voltage = msg.voltage
+                if not math.isnan(msg.current):
+                    # Convention: positive current = charging
+                    self.ui_ref.current = msg.current
+                    self.ui_ref.is_charging = self.ui_ref.current > 0.0
+                if not math.isnan(msg.temperature):
+                    self.ui_ref.temperature = msg.temperature
+
+        def ros2_spin():
+            try:
+                rclpy.init(args=None)
+                node = _BMSNode(self)
+                rclpy.spin(node)
+            except Exception as e:
+                print("[BMSPreviewUI] ROS2 spin error:", e)
+            finally:
+                try:
+                    rclpy.shutdown()
+                except Exception:
+                    pass
+
+        t = threading.Thread(target=ros2_spin, daemon=True)
+        t.start()
+        self._backend_threads.append(t)
+
+    def _start_can_reader(self):
+        if can is None:
+            print("[BMSPreviewUI] CAN backend requested but python-can is not installed.")
+            return
+        mapping = None
+        if self.can_map_path:
+            try:
+                if self.can_map_path.endswith('.json'):
+                    with open(self.can_map_path, 'r') as f:
+                        mapping = json.load(f)
+                else:
+                    if yaml is None:
+                        print("[BMSPreviewUI] YAML mapping requested but PyYAML is not installed.")
+                    else:
+                        with open(self.can_map_path, 'r') as f:
+                            mapping = yaml.safe_load(f)
+            except Exception as e:
+                print("[BMSPreviewUI] Failed to load CAN map:", e)
+
+        # Expected mapping structure example:
+        # {
+        #   "battery": {"soc": {"id": 256, "offset": 0, "scale": 0.1, "start_bit": 0, "length": 16, "endian": "big"},
+        #                "voltage": {...}, "current": {...}, "temperature": {...}},
+        #   "cap": {"voltage": {...}, "temp": {...}, "esr": {...}, "capacitance": {...}}
+        # }
+
+        def extract_signal(data: bytes, spec: dict, default=None):
+            try:
+                start = int(spec.get('start_bit', 0))
+                length = int(spec.get('length', 16))
+                endian = spec.get('endian', 'big')
+                byte_start = start // 8
+                num_bytes = (length + 7) // 8
+                raw = int.from_bytes(data[byte_start:byte_start+num_bytes], byteorder='big' if endian=='big' else 'little')
+                # No bit masking refinement for brevity
+                scale = float(spec.get('scale', 1.0))
+                offset = float(spec.get('offset', 0.0))
+                return raw * scale + offset
+            except Exception:
+                return default
+
+        def can_loop():
+            try:
+                bus = can.interface.Bus(channel=self.can_if, bustype='socketcan')
+                while True:
+                    msg = bus.recv(0.2)
+                    if msg is None:
+                        continue
+                    if mapping:
+                        # battery signals
+                        batt = mapping.get('battery', {})
+                        if msg.arbitration_id == int(batt.get('soc', {}).get('id', -1)):
+                            val = extract_signal(msg.data, batt['soc'])
+                            if val is not None:
+                                self.battery_level = max(0.0, min(100.0, float(val)))
+                        if msg.arbitration_id == int(batt.get('voltage', {}).get('id', -1)):
+                            val = extract_signal(msg.data, batt['voltage'])
+                            if val is not None:
+                                self.voltage = float(val)
+                        if msg.arbitration_id == int(batt.get('current', {}).get('id', -1)):
+                            val = extract_signal(msg.data, batt['current'])
+                            if val is not None:
+                                self.current = float(val)
+                                self.is_charging = self.current > 0.0
+                        if msg.arbitration_id == int(batt.get('temperature', {}).get('id', -1)):
+                            val = extract_signal(msg.data, batt['temperature'])
+                            if val is not None:
+                                self.temperature = float(val)
+                        # capacitor signals
+                        cap = mapping.get('cap', {})
+                        if msg.arbitration_id == int(cap.get('voltage', {}).get('id', -1)):
+                            val = extract_signal(msg.data, cap['voltage'])
+                            if val is not None:
+                                self.cap_voltage = float(val)
+                        if msg.arbitration_id == int(cap.get('temp', {}).get('id', -1)):
+                            val = extract_signal(msg.data, cap['temp'])
+                            if val is not None:
+                                self.cap_temp = float(val)
+                        if msg.arbitration_id == int(cap.get('esr', {}).get('id', -1)):
+                            val = extract_signal(msg.data, cap['esr'])
+                            if val is not None:
+                                self.cap_esr_milliohm = float(val)
+                        if msg.arbitration_id == int(cap.get('capacitance', {}).get('id', -1)):
+                            val = extract_signal(msg.data, cap['capacitance'])
+                            if val is not None:
+                                self.cap_capacitance_F = float(val)
+            except Exception as e:
+                print("[BMSPreviewUI] CAN loop error:", e)
+
+        t = threading.Thread(target=can_loop, daemon=True)
+        t.start()
+        self._backend_threads.append(t)
 
     def cap_energy_Wh(self):
         # E = 1/2 C V^2  (J) => Wh = J / 3600
@@ -1150,17 +1319,37 @@ def main():
     ap = argparse.ArgumentParser(description="BMS HDMI Preview UI")
     ap.add_argument("--fullscreen", action="store_true", help="Run in fullscreen mode")
     ap.add_argument("--window", action="store_true", help="Run in windowed preview mode")
+    ap.add_argument("--screen", type=int, default=-1, help="Select screen index for fullscreen (HDMI)")
+    ap.add_argument("--backend", choices=["sim", "ros2", "can"], default="sim", help="Data backend")
+    ap.add_argument("--can-if", type=str, default="can0", help="socketcan interface name")
+    ap.add_argument("--can-map", type=str, default="", help="Path to CAN mapping (json/yaml)")
+    ap.add_argument("--ros2-batt-topic", type=str, default="/battery_state", help="ROS2 BatteryState topic")
     ap.add_argument("--hmi", action="store_true", help="Run industrial HMI-style dashboard")
     ap.add_argument("--ios18", action="store_true", help="Run iOS 18 style dashboard")
     args = ap.parse_args()
 
     app = QApplication(sys.argv)
-    ui = BMSPreviewUI()
+    ui = BMSPreviewUI(
+        backend=args.backend,
+        can_if=args.can_if,
+        can_map_path=args.can_map,
+        ros2_batt_topic=args.ros2_batt_topic,
+    )
     ui.mode_hmi = bool(args.hmi)
     ui.mode_ios18 = bool(args.ios18)
 
     if args.fullscreen and not args.window:
         ui.setWindowFlag(Qt.FramelessWindowHint, True)
+        if args.screen >= 0:
+            # move to selected screen geometry
+            try:
+                from PyQt5.QtWidgets import QDesktopWidget
+                desk = QDesktopWidget()
+                if 0 <= args.screen < desk.screenCount():
+                    geo = desk.screenGeometry(args.screen)
+                    ui.setGeometry(geo)
+            except Exception:
+                pass
         ui.showFullScreen()
     else:
         ui.resize(1500, 950)
