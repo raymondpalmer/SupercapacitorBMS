@@ -1,6 +1,6 @@
 # BMS Display System - HDMI接口电池管理系统显示界面
 
-这是一个专为电池管理系统(BMS)设计的现代化HDMI显示界面，具有CarPlay Ultra风格的设计和流畅的充电动画。
+这是一个专为电池管理系统(BMS)设计的现代化HDMI显示界面，提供 CarPlay/iOS18 风格的精致可视化、优雅的动画与真实数据后端（ROS2/CAN）对接能力。
 
 ## 功能特性
 
@@ -9,10 +9,10 @@
 - **渐变背景**: 深色主题配合蓝色渐变，专业感十足
 - **圆角设计**: 现代化的圆角元素，符合当前设计趋势
 
-### ⚡ 充电动画效果
-- **闪电图标**: 充电时显示动态闪电图标
-- **脉冲环**: 多层脉冲环动画，增强视觉效果
-- **透明度变化**: 平滑的透明度动画，提升用户体验
+### ⚡ 充电/指针动画
+- **光剑式拖影**: 指针沿边缘的连续光带，随运动产生丝滑拖尾（Screen 叠加，只增亮不变暗）
+- **低电量呼吸光**: additive 红色呼吸，不压暗底层
+- **渐变圆环**: 统一亮度、圆角端帽、起点色严格一致
 
 ### 📊 电池信息显示
 - **实时数据**: 显示电池电量、电压、电流、温度
@@ -20,17 +20,17 @@
 - **颜色编码**: 根据电量状态显示不同颜色（绿色/橙色/红色）
 
 ### 🖥️ 多种显示模式
-- **HDMI模式**: 专为HDMI显示器优化的全屏模式
-- **全屏模式**: 主显示器全屏显示
-- **预览模式**: 窗口化显示，便于开发和调试
+- **HDMI 全屏**: 可通过 `--screen <index>` 指定输出到目标屏幕
+- **窗口预览**: 窗口化显示，便于开发和调试
 
 ## 系统要求
 
-### 软件依赖
-- Ubuntu 20.04+ / ROS2 Humble+
-- Qt5 或 Qt6
-- X11 显示系统
+### 软件依赖（Python 预览 UI）
 - Python 3.8+
+- PyQt5
+- （可选）python-can（如使用 CAN 后端）
+- （可选）PyYAML（如使用 YAML 格式映射）
+- （可选）can-utils（socketcan 调试）
 
 ### 硬件要求
 - 支持HDMI输出的显卡
@@ -39,19 +39,14 @@
 
 ## 安装说明
 
-### 1. 安装系统依赖
+### 1. 安装依赖（二选一）
 ```bash
-# 安装Qt开发包
+# 方式A：系统包（推荐一键）
 sudo apt update
-sudo apt install qt6-base-dev qt6-base-dev-tools
-# 或者Qt5
-sudo apt install qtbase5-dev qt5-qmake
+sudo apt install -y python3-pyqt5 python3-can python3-yaml can-utils
 
-# 安装X11工具
-sudo apt install x11-xserver-utils
-
-# 安装VNC服务器（可选，用于远程查看）
-sudo apt install x11vnc
+# 方式B：用户级 pip
+python3 -m pip install --user PyQt5 python-can PyYAML
 ```
 
 ### 2. 构建项目
@@ -66,32 +61,21 @@ colcon build --packages-select bms_can_bridge_cpp
 source install/setup.bash
 ```
 
-## 使用方法
+## 使用方法（Python 预览 UI）
 
-### 启动BMS显示系统
-
-#### 方法1: 直接运行可执行文件
 ```bash
-# 预览模式（窗口化）
-./build/bms_can_bridge_cpp/bms_display_system --preview
+# 窗口预览（模拟数据）
+python3 scripts/preview_ui.py --window --ios18
 
-# 全屏模式
-./build/bms_can_bridge_cpp/bms_display_system --fullscreen
+# HDMI 全屏到屏幕1（根据实际改索引）+ 模拟数据
+python3 scripts/preview_ui.py --fullscreen --screen 1 --ios18
 
-# HDMI模式
-./build/bms_can_bridge_cpp/bms_display_system --hdmi
-```
+# 使用 ROS2 作为数据源（需已 source ROS 环境并有 BatteryState 发布）
+python3 scripts/preview_ui.py --window --ios18 --backend ros2 --ros2-batt-topic /battery_state
 
-#### 方法2: 使用ROS2 launch文件
-```bash
-# 预览模式
-ros2 launch bms_can_bridge_cpp bms_display.launch.py preview:=true
-
-# HDMI模式
-ros2 launch bms_can_bridge_cpp bms_display.launch.py hdmi:=true
-
-# 全屏模式
-ros2 launch bms_can_bridge_cpp bms_display.launch.py fullscreen:=true
+# 使用 CAN(socketcan) 作为数据源（示例接口 can0 + JSON 映射）
+python3 scripts/preview_ui.py --fullscreen --screen 1 --ios18 \
+  --backend can --can-if can0 --can-map /path/to/map.json
 ```
 
 #### 方法3: 使用虚拟显示器脚本
@@ -136,11 +120,18 @@ chmod +x scripts/virtual_display.py
 - **文字色**: 白色 (#FFFFFF)
 
 ### 动画效果
-- **充电动画**: 闪电图标 + 脉冲环
+- **光剑式拖影**: 连续光带，细分插值，过渡丝滑
 - **波浪效果**: 底部动态波浪
-- **淡入淡出**: 平滑的透明度变化
+- **低电量呼吸**: additive 只增亮
 
 ## 开发说明
+
+### Python 预览 UI（当前推荐）
+- 主文件：`scripts/preview_ui.py`
+- 关键参数：`--backend sim|ros2|can`、`--screen`、`--ios18`/`--hmi`
+- CAN 映射：支持 JSON/YAML，字段示例参见源码注释
+
+### C++/Qt + ROS2（历史说明，暂作参考）
 
 ### 项目结构
 ```
@@ -159,20 +150,18 @@ bms_can_bridge_cpp/
 ```
 
 ### 自定义开发
-- 修改颜色方案: 编辑 `bms_display_ui.cpp` 中的颜色定义
-- 添加新动画: 在 `setupAnimations()` 函数中添加新的动画
-- 修改布局: 调整 `paintEvent()` 中的绘制函数
+- Python 预览：在 `scripts/preview_ui.py` 中调整颜色/布局/动画即可
+- C++：编辑 `src/bms_display_ui.cpp` 对应函数
 
 ## 故障排除
 
 ### 常见问题
 
-#### 1. Qt库未找到
+#### 1. Python 报 “无法解析导入 can”
 ```bash
-# 确保安装了Qt开发包
-sudo apt install qt6-base-dev
-# 或者
-sudo apt install qtbase5-dev
+# 安装 python-can（系统包或 pip）
+sudo apt install -y python3-can   # 或
+python3 -m pip install --user python-can
 ```
 
 #### 2. 显示权限问题
@@ -218,11 +207,9 @@ export QT_LOGGING_RULES="qt.qpa.*=true"
 ## 扩展功能
 
 ### 未来计划
-- [ ] 支持触摸屏操作
-- [ ] 添加更多动画效果
-- [ ] 支持多语言界面
-- [ ] 集成实时数据源
-- [ ] 添加配置界面
+- [ ] 触摸屏与手势
+- [ ] C++/ROS2 集成完善与发布
+- [ ] 丰富更多主题与布局预设
 
 ### 贡献指南
 欢迎提交Issue和Pull Request来改进这个项目！
@@ -239,4 +226,4 @@ export QT_LOGGING_RULES="qt.qpa.*=true"
 
 ---
 
-**注意**: 这是一个演示系统，实际部署时请根据具体需求调整参数和配置。
+**注意**: 这是一个演示系统，实际部署时请根据具体需求调整参数和配置。详见 `CHANGELOG.md`。
