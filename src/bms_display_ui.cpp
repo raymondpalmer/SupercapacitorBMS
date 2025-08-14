@@ -4,7 +4,6 @@
 #include <QPainterPath>
 #include <QConicalGradient>
 #include <QDateTime>
-#include <QVector>
 #include <QDebug>
 
 BMSDisplayUI::BMSDisplayUI(QWidget *parent)
@@ -120,94 +119,73 @@ void BMSDisplayUI::paintEvent(QPaintEvent *event)
 
 void BMSDisplayUI::drawBackground(QPainter &painter)
 {
-    // 深色渐变背景，营造iOS风格
-    QLinearGradient gradient(0, 0, width(), height());
-    gradient.setColorAt(0, QColor(40, 50, 80));
-    gradient.setColorAt(1, QColor(20, 24, 36));
+    // 创建渐变背景
+    QLinearGradient gradient(0, 0, 0, height());
+    gradient.setColorAt(0, backgroundColor);
+    gradient.setColorAt(1, QColor(18, 18, 20));
+    
     painter.fillRect(rect(), gradient);
-
-    // 轻柔的散景效果
-    painter.setPen(Qt::NoPen);
-    QVector<QColor> circles = {
-        QColor(255, 255, 255, 25),
-        QColor(255, 255, 255, 15),
-        QColor(255, 255, 255, 10)
-    };
-    QVector<QPointF> positions = {
-        QPointF(width() * 0.2, height() * 0.3),
-        QPointF(width() * 0.8, height() * 0.2),
-        QPointF(width() * 0.7, height() * 0.8)
-    };
-    QVector<double> radii = {
-        width() * 0.25,
-        width() * 0.18,
-        width() * 0.20
-    };
-
-    for (int i = 0; i < circles.size(); ++i) {
-        painter.setBrush(circles[i]);
-        painter.drawEllipse(positions[i], radii[i], radii[i]);
+    
+    // 添加网格效果
+    painter.setPen(QPen(QColor(255, 255, 255, 20), 1));
+    for (int x = 0; x < width(); x += 50) {
+        painter.drawLine(x, 0, x, height());
+    }
+    for (int y = 0; y < height(); y += 50) {
+        painter.drawLine(0, y, width(), y);
     }
 }
 
 void BMSDisplayUI::drawBatteryIcon(QPainter &painter, const QRectF &rect)
 {
     painter.save();
-
-    // 绘制外圈进度环
-    QRectF ringRect = rect.adjusted(-20, -20, 20, 20);
-    painter.setPen(QPen(QColor(255, 255, 255, 30), 12));
-    painter.setBrush(Qt::NoBrush);
-    painter.drawArc(ringRect, 90 * 16, -360 * 16);
-
-    QPen progressPen(QColor(255, 255, 255, 180), 12);
-    progressPen.setCapStyle(Qt::RoundCap);
-    painter.setPen(progressPen);
-    painter.drawArc(ringRect, 90 * 16, -batteryLevel / 100.0 * 360 * 16);
-
+    
     // 电池外框
     QPainterPath batteryPath;
     batteryPath.addRoundedRect(rect, 20, 20);
-
+    
     // 电池正极
     QRectF positiveRect(rect.right() - 15, rect.center().y() - 30, 15, 60);
     batteryPath.addRoundedRect(positiveRect, 7, 7);
-
+    
+    // 绘制电池外框
     painter.setPen(QPen(textColor, 4));
     painter.setBrush(Qt::NoBrush);
     painter.drawPath(batteryPath);
-
+    
     // 绘制电池电量
     QRectF levelRect = rect.adjusted(8, 8, -8, -8);
     QPainterPath levelPath;
     levelPath.addRoundedRect(levelRect, 12, 12);
-
+    
+    // 根据电量设置颜色
     QColor levelColor;
     if (batteryLevel > 50) {
-        levelColor = QColor(52, 199, 89);
+        levelColor = QColor(52, 199, 89);  // Green
     } else if (batteryLevel > 20) {
-        levelColor = QColor(255, 149, 0);
+        levelColor = QColor(255, 149, 0);  // Orange
     } else {
-        levelColor = QColor(255, 59, 48);
+        levelColor = QColor(255, 59, 48);  // Red
     }
-
+    
     painter.setBrush(levelColor);
     painter.setPen(Qt::NoPen);
-
+    
+    // 绘制电量条
     double levelHeight = levelRect.height() * (batteryLevel / 100.0);
     QRectF actualLevelRect = levelRect;
     actualLevelRect.setTop(levelRect.bottom() - levelHeight);
-
+    
     QPainterPath actualLevelPath;
     actualLevelPath.addRoundedRect(actualLevelRect, 12, 12);
     painter.drawPath(actualLevelPath);
-
+    
     // 绘制电量百分比
     painter.setFont(QFont("SF Pro Display", 36, QFont::Bold));
     painter.setPen(textColor);
     QString levelText = QString("%1%").arg(static_cast<int>(batteryLevel));
     painter.drawText(rect, Qt::AlignCenter, levelText);
-
+    
     painter.restore();
 }
 
@@ -262,99 +240,133 @@ void BMSDisplayUI::drawChargingAnimation(QPainter &painter)
 void BMSDisplayUI::drawBatteryInfo(QPainter &painter)
 {
     painter.save();
-
-    QRectF infoRect(width() * 0.45, height() * 0.25, width() * 0.45, height() * 0.5);
-
-    // 玻璃质感信息面板
+    
+    QRectF infoRect(width() * 0.45, height() * 0.2, width() * 0.45, height() * 0.6);
+    
+    // 信息背景
     QPainterPath infoPath;
-    infoPath.addRoundedRect(infoRect, 30, 30);
-
-    painter.setBrush(QColor(255, 255, 255, 40));
-    painter.setPen(QPen(QColor(255, 255, 255, 80), 2));
+    infoPath.addRoundedRect(infoRect, 25, 25);
+    
+    QLinearGradient infoGradient(infoRect.topLeft(), infoRect.bottomRight());
+    infoGradient.setColorAt(0, QColor(44, 44, 46, 200));
+    infoGradient.setColorAt(1, QColor(28, 28, 30, 200));
+    
+    painter.setBrush(infoGradient);
+    painter.setPen(QPen(QColor(255, 255, 255, 50), 2));
     painter.drawPath(infoPath);
-
+    
     // 绘制电池信息
     painter.setFont(titleFont);
     painter.setPen(textColor);
-    painter.drawText(infoRect.x() + 40, infoRect.y() + 80, "Battery");
-
+    painter.drawText(infoRect.x() + 30, infoRect.y() + 80, "Battery Status");
+    
+    // 电压信息
     painter.setFont(infoFont);
-    painter.setPen(QColor(255, 255, 255, 220));
-
+    painter.setPen(QColor(255, 255, 255, 200));
+    
     int yOffset = 160;
-    int lineHeight = 55;
-
-    painter.drawText(infoRect.x() + 40, infoRect.y() + yOffset,
-                    QString("%1 V").arg(voltage, 0, 'f', 1));
+    int lineHeight = 50;
+    
+    painter.drawText(infoRect.x() + 30, infoRect.y() + yOffset, 
+                    QString("Voltage: %1 V").arg(voltage, 0, 'f', 1));
     yOffset += lineHeight;
-
-    painter.drawText(infoRect.x() + 40, infoRect.y() + yOffset,
-                    QString("%1 A").arg(current, 0, 'f', 1));
+    
+    painter.drawText(infoRect.x() + 30, infoRect.y() + yOffset,
+                    QString("Current: %1 A").arg(current, 0, 'f', 1));
     yOffset += lineHeight;
-
-    painter.drawText(infoRect.x() + 40, infoRect.y() + yOffset,
-                    QString("%1°C").arg(temperature, 0, 'f', 1));
+    
+    painter.drawText(infoRect.x() + 30, infoRect.y() + yOffset,
+                    QString("Temperature: %1°C").arg(temperature, 0, 'f', 1));
     yOffset += lineHeight;
-
+    
+    // 状态指示
     painter.setFont(statusFont);
     if (isCharging) {
         painter.setPen(QColor(52, 199, 89));
-        painter.drawText(infoRect.x() + 40, infoRect.y() + yOffset, "Charging");
+        painter.drawText(infoRect.x() + 30, infoRect.y() + yOffset, "● Charging");
     } else {
         painter.setPen(QColor(255, 149, 0));
-        painter.drawText(infoRect.x() + 40, infoRect.y() + yOffset, "Discharging");
+        painter.drawText(infoRect.x() + 30, infoRect.y() + yOffset, "● Discharging");
     }
-
+    
     painter.restore();
 }
 
 void BMSDisplayUI::drawCarPlayStyle(QPainter &painter)
 {
     painter.save();
-
-    // 底部半透明Dock栏
-    QRectF dockRect(width() * 0.1, height() * 0.82, width() * 0.8, height() * 0.12);
-    QPainterPath dockPath;
-    dockPath.addRoundedRect(dockRect, 30, 30);
-
-    painter.setBrush(QColor(255, 255, 255, 25));
+    
+    // CarPlay风格的动态背景
+    QRectF carPlayRect(0, height() * 0.7, width(), height() * 0.3);
+    
+    // 动态波浪效果
+    QPainterPath wavePath;
+    wavePath.moveTo(carPlayRect.left(), carPlayRect.bottom());
+    
+    for (int x = 0; x <= carPlayRect.width(); x += 10) {
+        double waveY = carPlayRect.bottom() - 50 * sin((x + carPlayFrame * 2) * 0.02);
+        wavePath.lineTo(x, waveY);
+    }
+    
+    wavePath.lineTo(carPlayRect.right(), carPlayRect.bottom());
+    wavePath.closeSubpath();
+    
+    // 渐变填充
+    QLinearGradient waveGradient(carPlayRect.topLeft(), carPlayRect.bottomRight());
+    waveGradient.setColorAt(0, QColor(primaryColor.red(), primaryColor.green(), primaryColor.blue(), 100));
+    waveGradient.setColorAt(1, QColor(secondaryColor.red(), secondaryColor.green(), secondaryColor.blue(), 150));
+    
+    painter.setBrush(waveGradient);
     painter.setPen(Qt::NoPen);
-    painter.drawPath(dockPath);
-
-    // 文字提示
-    painter.setFont(QFont("SF Pro Display", 24, QFont::Medium));
+    painter.drawPath(wavePath);
+    
+    // CarPlay图标和文字
+    painter.setFont(QFont("SF Pro Display", 32, QFont::Bold));
     painter.setPen(textColor);
-    painter.drawText(dockRect, Qt::AlignCenter, "Supercapacitor BMS");
-
+    
+    QString carPlayText = "CarPlay Ultra";
+    QFontMetrics fm(painter.font());
+    int textWidth = fm.horizontalAdvance(carPlayText);
+    
+    painter.drawText(carPlayRect.center().x() - textWidth / 2, 
+                    carPlayRect.center().y() + 20, carPlayText);
+    
     painter.restore();
 }
 
 void BMSDisplayUI::drawStatusBar(QPainter &painter)
 {
     painter.save();
-
+    
     QRectF statusRect(0, 0, width(), 80);
-
-    painter.setBrush(QColor(0, 0, 0, 120));
+    
+    // 状态栏背景
+    QLinearGradient statusGradient(statusRect.topLeft(), statusRect.bottomRight());
+    statusGradient.setColorAt(0, QColor(0, 0, 0, 180));
+    statusGradient.setColorAt(1, QColor(0, 0, 0, 100));
+    
+    painter.setBrush(statusGradient);
     painter.setPen(Qt::NoPen);
     painter.drawRect(statusRect);
-
+    
+    // 时间显示
     painter.setFont(statusFont);
     painter.setPen(textColor);
-
+    
     QDateTime currentTime = QDateTime::currentDateTime();
-    QString timeText = currentTime.toString("hh:mm");
-
-    QFontMetrics fm(painter.font());
-    int timeWidth = fm.horizontalAdvance(timeText);
-    painter.drawText((width() - timeWidth) / 2, 50, timeText);
-
-    // 连接状态指示
-    QString statusSymbol = isConnected ? QStringLiteral("●") : QStringLiteral("○");
+    QString timeText = currentTime.toString("hh:mm:ss");
+    QString dateText = currentTime.toString("yyyy-MM-dd");
+    
+    painter.drawText(30, 50, timeText);
+    painter.drawText(30, 70, dateText);
+    
+    // 连接状态
+    QString statusText = isConnected ? "Connected" : "Disconnected";
     QColor statusColor = isConnected ? QColor(52, 199, 89) : QColor(255, 59, 48);
+    
     painter.setPen(statusColor);
-    painter.drawText(width() - 60, 50, statusSymbol);
-
+    painter.drawText(width() - 200, 50, statusText);
+    
     painter.restore();
 }
 
